@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>NY Times</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>New York Times Search</h1>
+			</div>
+		</div>
+		<div class="row">
+			<form id="search-form">
+			    <label for="condiment-input">Search Term:</label><br>
+			    <input type="text" id="searchTerm" name="findingSearch"><br>
+			</form>
+			<form id="number-form">
+			    <label for="number-input">Number of Records to retrieve:</label><br>
+			    <input type="text" id="numRecords" name="numberSearch"><br>
+			</form>
+			<form id="start-form">
+			    <label for="start-input">Start Year (Optional):</label><br>
+			    <input type="text" id="startYear" name="startSearch"><br>
+			</form>
+			<form id="end-form">
+			    <label for="end-input">End Year(Optional):</label><br>
+			    <input type="text" id="endYear" name="endSearch"><br>
+			</form>
+			<input id="findSearch" type="submit" value="Submit">
+		</div>
+		<div class="row">
+			<div id="articleInfo">
+			</div>
+		</div>
+	</div>
+<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+<script>
+var searchResults = "";
+var searchNumber = 10;
+var searchStart = null;
+var searchEnd = null;
+
+	$('#findSearch').on('click', function(){
+		// Here we grab the text from the input box 
+		searchResults = $('#searchTerm').val().trim();
+		searchNumber = $("#numRecords").val();
+		searchStart = $("#startYear").val();
+		searchEnd = $("#endYear").val();
+		
+		//console.log(searchTerm);
+		displaySearchResults();
+		return false;
+	});	
+
+	function displaySearchResults(){
+		$("#articleInfo").empty();
+		//var searchWords = ;
+		//console.log(searchWords);
+		//var searchNum = $(this).attr('data-name');
+			// Here we assemble our URL 
+		var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=" + searchResults + "&api_key=12fa636927f44547bb0687af4cf8a35c";
+		console.log(queryURL);
+		console.log(searchStart);
+		console.log(searchEnd);
+		/*if(searchNumber !== null){
+			//searchNumber = 10;
+			alert("search Number is not null");
+		} 
+		if (searchStart !== null) {
+		 	//$(queryURL).append("&?begin_date=" + searchStart);
+		 	console.log(queryURL);
+		 	alert("search start is not null");
+		  }
+		if (searchEnd !== null) {
+		    //$(queryURL).append('&?end_date='+searchEnd);
+		    console.log(queryURL);
+		    alert("search end is not null");
+		  }*/
+		$.ajax({url: queryURL, method: "GET"}).done(function(response){
+			console.log(response);
+			for(var i = 0;i<searchNumber;i++){
+				var artDiv = $('<div class="articleContainer">');
+				var article = response.response.docs[i];
+				var headline = article.headline.main;
+				var pThree = $("<p>").text("Headline: " + headline);
+				artDiv.append(pThree);
+				var leadParagraph = article.lead_paragraph;
+				var pOne = $('<p>').text( "Lead Paragraph: " + leadParagraph);
+				artDiv.append(pOne);
+				var weburl = article.web_url;
+				/*var pTwo = $('<p>').text("Web URL: " + weburl);
+				artDiv.append(pTwo);*/
+				var anchorDiv = $("<a href="+weburl+">");
+				anchorDiv.append(weburl);
+				//anchorDiv.append(headline);
+				$(artDiv).append(anchorDiv).append('<br><br><hr>');
+				$('#articleInfo').prepend(artDiv);
+			}
+		});
+	}
+
+</script>
+</body>
+</html>
