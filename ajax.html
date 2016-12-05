@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	var title="space+jam";
+	var queryURL = "http://www.omdbapi.com/?t=" + title + "&y=&plot=short&r=json";
+	$.ajax({url: queryURL, method: "GET"}).done(function(response){
+		console.log(response);
+		console.log(response["Title"]);
+		console.log(response.Title);
+	});
+	//CRUD: Create, Read, Update, Delete
+	//inHTTP: Post, Get, Put, Delete
+	//must have .done to callback .fail .success
+
+	var title1="romacing+the+stone";
+	var queryURL = "http://www.omdbapi.com/?t=" + title + "&y=&plot=short&r=json";
+	$.ajax({url: queryURL, method: "GET"}).done(function(response){
+		console.log(response);
+	});
+	$.ajax({url: "http://www.omdbapi.com/?t=inception", method: "GET"}).done(function(response){
+		console.log(response);
+	});
+
+	$.ajax({url: "http://www.omdbapi.com/?t=the+dark+knight", method: "GET"}).done(function(response){
+		console.log(response);
+		console.log(response.Actors);
+		console.log(response.Runtime);
+	});
+	$.ajax({url: "http://www.omdbapi.com/?s=lord+of+the+rings&y=&plot=short&r=json", method: "GET"}).done(function(response){
+		console.log(response);
+	});
+	$.ajax({url: "http://api.giphy.com/v1/gifs/search?q=happy+tree+friends&limit=1&api_key=dc6zaTOxFJmzC", method: "GET"}).done(function(response){
+		console.log(response);
+	})
+
+</script>
+</body>
+</html>
